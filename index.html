@@ -9,33 +9,64 @@
 
     <form  name="request_token">
       <dl>
+	<dt>Authentication Method</dt>
+        <dd>
+	  <label>Password</label>
+	  <input name="auth_method" type="radio" id="auth_method_password" value="password" checked></input>
+	  <label>Token</label>
+	  <input name="auth_method" type="radio" id="auth_method_token" value="token" ></input>
+	</dd>
+	<dt>Scoped</dt><dd><input id="scoped" type="checkbox"></input></dd>
+
 	<dt>username</dt><dd><input id="username" type="text" value="username"></input></dd>
 	<dt>password</dt><dd><input id="password" type="password" ></input></dd>
 	<dt>project</dt><dd><select id="project_select"></select></dd>
       </dl>
-      <input id = "btnSubmit" type="submit" value="Request Token"/>
+      <a href="#"  id = "button_submit">Request Token</a>
+
     </form>
-    <a href="#" id="list_projects" >List Projects</a>
-    <ul id="project_list"></ul>
+    <a href="#" id="list_projects">List Projects</a>
+
+    <div id="token">
+      <h2>Token</h2>
+
+      <h3>User</h3>
+      <dl class="user">
+	<dt>Username</dt><dd id="current_username"></dd>
+	<dt>User ID</dt><dd id="current_userid"></dd>
+      </dl>
+      
+      <h3>Scope</h3>
+      <div id="token_scope">Unscoped</div>
+
+      <h3>Roles For Project</h3>
+      <ol id="token_role_list"></ol>
+    </div>
+
+    <div id="catalog">
+      <h2>Catalog</h2>
+      <label>Keystone Url</label><div id="keystone_url"></div>
+      <ol id="service_list"></ol>
+    </div>      
 
 
-    <dl class="user">
-      <dt>Username</dt><dd id="current_username"></dd></dl>
-      <dt>User ID</dt><dd id="current_userid"></dd></dl>
+
+    <div id="roles">
+      <h2>Roles</h2>
+      <a href="#" id="list_roles">List Roles</a>
+      <ol id="global_role_list"></ol>
+      <form id="add_role">	
+	<input id="role_name" type="text" value=""></input>
+	<input  id="button_add_role" type="submit" value="Add Role"/>
+      </form>
+    </div>      
+
     <script>
-
-
       $(document).ready(function() {
-
-      $("#btnSubmit").click(function(){
-      submit_token_request()
-      }); 
-
-      $("#list_projects").click(function(){
-      list_projects()
-      }); 
-
-
+      $("#button_submit").click(submit_token_request); 
+      $("a#list_projects").click(list_projects); 
+      $("a#list_roles").click(list_roles); 
+      $("#button_add_role").click(add_role); 
 
       });
     </script>
