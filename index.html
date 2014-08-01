@@ -6,7 +6,6 @@
   </head>
   <body>
     <h1>Portal</h1>
-
     <form  name="request_token">
       <dl>
         <dt>Authentication Method</dt>
@@ -33,34 +32,25 @@
         <dd><select id="project_select"></select></dd>
       </dl>
       <a href="#"  id = "button_submit">Request Token</a>
-
     </form>
     <a href="#" id="list_projects">List Projects</a>
-
     <div id="token">
       <h2>Token</h2>
-
       <h3>User</h3>
       <dl class="user">
         <dt>Username</dt><dd id="current_username"></dd>
         <dt>User ID</dt><dd id="current_userid"></dd>
       </dl>
-
       <h3>Scope</h3>
       <div id="token_scope">Unscoped</div>
-
       <h3>Roles For Project</h3>
       <ol id="token_role_list"></ol>
     </div>
-
     <div id="catalog">
       <h2>Catalog</h2>
       <label>Keystone Url</label><div id="keystone_url"></div>
       <ol id="service_list"></ol>
     </div>
-
-
-
     <div id="roles">
       <h2>Roles</h2>
       <a href="#" id="list_roles">List Roles</a>
@@ -70,14 +60,12 @@
         <input  id="button_add_role" type="submit" value="Add Role"/>
       </form>
     </div>
-
     <script>
       $(document).ready(function() {
       $("#button_submit").click(submit_token_request);
       $("a#list_projects").click(list_projects);
       $("a#list_roles").click(list_roles);
       $("#button_add_role").click(add_role);
-
       });
     </script>
   </body>

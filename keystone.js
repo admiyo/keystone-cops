@@ -3,7 +3,6 @@ var keystone_endpoint = null
 var project_data = null
 var token_data = null
 var token_id = null
-
 var unscoped_token_request_body =
     {
         "auth": {
@@ -12,7 +11,6 @@ var unscoped_token_request_body =
             },
         }
     };
-
 var password_method_data =
     {
         "user": {
@@ -23,14 +21,10 @@ var password_method_data =
             "password": ""
         }
     };
-
 var token_method_data =
     {
         "id": ""
     };
-
-
-
 var project_scoped_section =
     {
         "project": {
@@ -40,7 +34,6 @@ var project_scoped_section =
             "name": ""
         }
     };
-
 
 
 function add_project(element, index, array) {
@@ -88,9 +81,9 @@ function display_token_data(){
     $("ol#service_list > li").remove()
     if(token_data.hasOwnProperty('catalog')){
         token_data.catalog.forEach(function (service, index, array){
-            li = $("ol#service_list").append($("<li>").append(service.name))
+            inner = $("<ol>")
             service.endpoints.forEach(function (endpoint, index, array){
-                dd = li.append($("<dl>"))
+                dd = $("<dl>")
                 dd.append($("<dt>")).append("id")
                 dd.append($("<dd>")).append(endpoint.id)
                 dd.append($("<dt>")).append("url")
@@ -104,7 +97,12 @@ function display_token_data(){
                     keystone_endpoint = endpoint.url + "/v3"
                     $("div#keystone_url").text(keystone_endpoint)
                 }
+                inner.append($("<li>").append(dd))
             })
+            $("ol#service_list").
+                append($("<li>").
+                       append(service.name).
+                       append(inner))
         })
     }
 }
