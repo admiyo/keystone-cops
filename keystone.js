@@ -1,4 +1,5 @@
-var auth_url = "/keystone/main/v3"
+var main_auth_url = "/keystone/main/v3";
+var kerberos_auth_url = "/keystone/krb/v3";
 var keystone_endpoint = null
 var project_data = null
 var token_data = null
@@ -114,25 +115,32 @@ function submit_token_request(){
     auth_method = $('input[name=auth_method]:checked').val()
 
 
-    token_request.auth.identity.methods.push(auth_method)
-
-    if (auth_method == "password"){
-        token_request.auth.identity['password'] =
-            jQuery.extend(true, {}, password_method_data)
-        username = $("input#username").val()
-        password = $("input#password").val()
-        token_request.auth.identity.password.user.name = username
-        token_request.auth.identity.password.user.password = password
+    use_kerberos = $('input:checkbox#kerberos').is(':checked')
+    if (use_kerberos){
+        auth_url=kerberos_auth_url;
+        token_request.auth.identity.methods.push("kerberos")
+        token_request.auth.identity['kerberos'] = {}
+    }else{
+        auth_url=main_auth_url
+        if (auth_method == "password"){
+            token_request.auth.identity.methods.push("password")
+            token_request.auth.identity['password'] =
+                jQuery.extend(true, {}, password_method_data)
+            username = $("input#username").val()
+            password = $("input#password").val()
+            token_request.auth.identity.password.user.name = username
+            token_request.auth.identity.password.user.password = password
+        }
     }
-
     if (auth_method == "token"){
+        token_request.auth.identity.methods.push("token")
         token_request.auth.identity['token'] =
             jQuery.extend(true, {}, token_method_data)
         token_request.auth.identity.token.id = token_id
     }
 
-    scoped = $('input:checkbox#scoped').is(':checked')
 
+    scoped = $('input:checkbox#scoped').is(':checked')
     if (scoped){
         token_request.auth['scope'] =
             jQuery.extend(true, {}, project_scoped_section)
