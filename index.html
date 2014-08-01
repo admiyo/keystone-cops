@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <title>Portal</title>
+    <script src="jquery.js"></script>
+    <script src="keystone.js"></script>
+  </head>
+  <body>
+    <h1>Portal</h1>
+
+    <form  name="request_token">
+      <dl>
+	<dt>username</dt><dd><input id="username" type="text" value="username"></input></dd>
+	<dt>password</dt><dd><input id="password" type="password" ></input></dd>
+	<dt>project</dt><dd><select id="project_select"></select></dd>
+      </dl>
+      <input id = "btnSubmit" type="submit" value="Request Token"/>
+    </form>
+    <a href="#" id="list_projects" >List Projects</a>
+    <ul id="project_list"></ul>
+
+
+    <dl class="user">
+      <dt>Username</dt><dd id="current_username"></dd></dl>
+      <dt>User ID</dt><dd id="current_userid"></dd></dl>
+    <script>
+
+
+      $(document).ready(function() {
+
+      $("#btnSubmit").click(function(){
+      submit_token_request()
+      }); 
+
+      $("#list_projects").click(function(){
+      list_projects()
+      }); 
+
+
+
+      });
+    </script>
+  </body>
+</html>
