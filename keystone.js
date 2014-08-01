@@ -1,4 +1,4 @@
-var auth_url = "https://ayoungf20packstack.cloudlab.freeipa.org/keystone/main/v3"
+var auth_url = "/keystone/main/v3"
 var keystone_endpoint = null
 var project_data = null
 var token_data = null
