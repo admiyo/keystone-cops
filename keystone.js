@@ -39,6 +39,8 @@ var project_scoped_section =
 
 function add_project(element, index, array) {
      $( "#project_select").append($('<option>').append(element.name));
+     $( "#assign_project_select").append($('<option>',{value: element.id}).append(element.name));
+
 }
 
 function list_projects(){
@@ -53,6 +55,9 @@ function list_projects(){
                 },
         success: function(data, textStatus, request){
             $("#project_select > option").remove()
+            $("#assign_project_select > option").remove()
+
+
             project_data = data
             project_data.projects.forEach(add_project)
             $('input:checkbox#scoped').prop('checked', true);
@@ -170,6 +175,44 @@ function add_role(element, index, array) {
     $("ol#global_role_list").append($('<li>').append(element.name));
 }
 
+
+function assign_role() {
+    user_id=$("input#assign_user_id").val()
+    role_id=$("select#role_select").val()
+    project_id=$("select#assign_project_select").val()
+    
+    request_url = keystone_endpoint + "/projects/" +
+        project_id+
+        "/users/"+
+        user_id+
+        "/roles/"+
+        role_id
+
+    alert(request_url)
+
+    $.ajax( {
+      url: request_url,
+      dataType: "json",
+      method:"put",
+      headers:{ "Content-Type": "application/json",
+                "X-Auth-Token": token_id
+              },
+      success: function(data, textStatus, request){
+          alert("roles assignment succeeded")
+      },
+
+      error: function(data, textStatus, request){
+          alert("roles assignment  failed")
+      }
+
+
+      });
+
+
+
+}
+
+
 function list_roles(){
     request_url = keystone_endpoint + "/roles"
 
@@ -181,11 +224,18 @@ function list_roles(){
                 "X-Auth-Token": token_id
               },
       success: function(data, textStatus, request){
-          $("ol#global_role_list > ls").remove()
+          $("ol#global_role_list > li").remove()
+          $("select#role_select > option").remove()
+
           data.roles.forEach(function (role, index, array){
                $("ol#global_role_list").
                   append($("<li>").
                          append(role.id + ":" +role.name ))
+
+              $("select#role_select").
+                  append($("<option>",{value: role.id}).
+                          append(role.name))
+
           })
       },
 

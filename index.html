@@ -36,6 +36,33 @@
       <a href="#"  id = "button_submit">Request Token</a>
     </form>
     <a href="#" id="list_projects">List Projects</a>
+
+
+    <div id="roles">
+      <h2>Roles</h2>
+      <a href="#" id="list_roles">List Roles</a>
+
+      <form id="assign_role_to_user_in_project">
+        <label>User Id</label>
+        <input id="assign_user_id" type="text"></input>
+        <label>Role</label>
+        <select id="role_select"></select>
+        <label>Project</label>
+        <dd><select id="assign_project_select"></select></dd>
+
+        <a href="#" id="assign_role">Assign Role To User Id</a>
+      </form>
+
+
+      <ol id="global_role_list"></ol>
+
+      <form id="add_role">
+        <input id="role_name" type="text" value=""></input>
+        <input  id="button_add_role" type="submit" value="Add Role"/>
+      </form>
+    </div>
+
+
     <div id="token">
       <h2>Token</h2>
       <h3>User</h3>
@@ -53,21 +80,14 @@
       <label>Keystone Url</label><div id="keystone_url"></div>
       <ol id="service_list"></ol>
     </div>
-    <div id="roles">
-      <h2>Roles</h2>
-      <a href="#" id="list_roles">List Roles</a>
-      <ol id="global_role_list"></ol>
-      <form id="add_role">
-        <input id="role_name" type="text" value=""></input>
-        <input  id="button_add_role" type="submit" value="Add Role"/>
-      </form>
-    </div>
     <script>
       $(document).ready(function() {
       $("#button_submit").click(submit_token_request);
       $("a#list_projects").click(list_projects);
       $("a#list_roles").click(list_roles);
+      $("a#assign_role").click(assign_role);
       $("#button_add_role").click(add_role);
+      $("input#scoped").prop('checked', false);
       });
     </script>
   </body>
