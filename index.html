@@ -91,6 +91,18 @@
       </form>
     </div>
 
+    <div id="user-lookup">
+      <h2>User Lookup</h2>
+      <label>Domain Name</label>
+      <input type="text" id="lookup-user-domain-name"> </input>
+      <label>User Name</label>
+      <input type="text" id="lookup-username"> </input>
+      <a href="#" id="lookup-user">Lookup User</a>
+      <label>User Id</label>
+      </ol id="lookedup-user-id"></ol>
+    </div>
+
+
     <script>
       $(document).ready(function() {
       $("#button_submit").click(submit_token_request);
@@ -101,6 +113,7 @@
       $("input#scoped").prop('checked', false);
       $("#button_add_domain").click(create_domain);
       $("a#list_domains").click(list_domains);
+      $("a#lookup-user").click(lookup_user);
       });
     </script>
   </body>
