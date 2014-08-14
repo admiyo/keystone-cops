@@ -39,7 +39,9 @@ var project_scoped_section =
 
 function add_project(project, index, array) {
      $( "#project_select").append($('<option>').append(project.name));
-     $( "#assign_project_select").append($('<option>',{value: project.id}).append(project.name));
+     $( "#assign_project_select").
+        append($('<option>',{value: project.id}).
+               append(project.name));
 
 }
 
@@ -104,7 +106,7 @@ function display_token_data(){
                 dd.append($("<dd>")).append(endpoint.interface)
                 if ((service.name == "keystone") &&
                     (endpoint.interface == "admin")){
-                    keystone_endpoint = endpoint.url + "/v3"
+                    keystone_endpoint = endpoint.url.replace("/v2.0","") + "/v3"
                     $("div#keystone_url").text(keystone_endpoint)
                 }
                 inner.append($("<li>").append(dd))
@@ -138,7 +140,8 @@ function submit_token_request(){
             username = $("input#username").val()
             password = $("input#password").val()
             user_domain_name = $("input#user_domain_name").val()
-            token_request.auth.identity.password.user.domain.name = user_domain_name
+            token_request.auth.identity.password.user.domain.name =
+                user_domain_name
             token_request.auth.identity.password.user.name = username
             token_request.auth.identity.password.user.password = password
         }
@@ -186,7 +189,7 @@ function assign_role() {
     user_id=$("input#assign_user_id").val()
     role_id=$("select#role_select").val()
     project_id=$("select#assign_project_select").val()
-    
+
     request_url = keystone_endpoint + "/projects/" +
         project_id+
         "/users/"+
@@ -213,8 +216,6 @@ function assign_role() {
 
 
       });
-
-
 
 }
 
@@ -289,12 +290,12 @@ function add_role(){
 
 
 function list_domains(){
-    request_url = auth_url + "/domains/"
+    request_url = keystone_endpoint + "/domains/"
     $.ajax( {
-	url: request_url,
+        url: request_url,
         dataType: "json",
         method:"get",
-	headers:{ "Content-Type": "application/json",
+        headers:{ "Content-Type": "application/json",
                   "X-Auth-Token": token_id
                 },
         success: function(data, textStatus, request){
@@ -308,15 +309,15 @@ function list_domains(){
           })
 
         }
-
     });
+    return false;
 }
 
 
 function create_domain(){
 
     create_domain_request = {
-	"domain": {
+        "domain": {
             "name": "",
             "description":""
         }
@@ -332,18 +333,45 @@ function create_domain(){
     $.ajax( {
         url: request_url,
         dataType: "json",
-	data: JSON.stringify(create_domain_request),
-	method:"post",
+        data: JSON.stringify(create_domain_request),
+        method:"post",
         headers:{ "Content-Type": "application/json",
                   "X-Auth-Token": token_id
                 },
-	success: function(data, textStatus, request){
+        success: function(data, textStatus, request){
             list_domains()
-	},
+        },
 
-	error: function(data, textStatus, request){
+        error: function(data, textStatus, request){
             alert("create domain failed")
         }
     });
 }
 
+
+
+function lookup_user(){
+    request_url = keystone_endpoint + "/users"
+    $.ajax( {
+        url: request_url,
+        dataType: "json",
+        method:"get",
+        headers:{ "Content-Type": "application/json",
+                  "X-Auth-Token": token_id
+                },
+        success: function(data, textStatus, request){
+            $("ol#domain_list > li").remove()
+            data.domains.forEach(function (user, index, array){
+               $("ol#domain_list").
+                  append($("<li>").
+                         append(user.name + ":" + user.id  ))
+          })
+
+
+        },
+        error: function(data, textStatus, request){
+            alert("lookup user  failed")
+        }
+
+    });
+}
