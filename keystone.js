@@ -16,7 +16,7 @@ var password_method_data =
     {
         "user": {
             "domain": {
-                "name": "Default"
+                "name": ""
             },
             "name": "",
             "password": ""
@@ -37,9 +37,9 @@ var project_scoped_section =
     };
 
 
-function add_project(element, index, array) {
-     $( "#project_select").append($('<option>').append(element.name));
-     $( "#assign_project_select").append($('<option>',{value: element.id}).append(element.name));
+function add_project(project, index, array) {
+     $( "#project_select").append($('<option>').append(project.name));
+     $( "#assign_project_select").append($('<option>',{value: project.id}).append(project.name));
 
 }
 
@@ -70,6 +70,10 @@ function list_projects(){
 function display_token_data(){
     $("#current_username").text(token_data.user.name )
     $("#current_userid").text(token_data.user.id )
+
+    $("#current_user_domain_name").text(token_data.user.domain.name )
+    $("#current_user_domain_id").text(token_data.user.domain.id )
+
 
     if(token_data.hasOwnProperty('project')){
         $("div#token_scope").text("project name = " + token_data.project.name)
@@ -133,6 +137,9 @@ function submit_token_request(){
                 jQuery.extend(true, {}, password_method_data)
             username = $("input#username").val()
             password = $("input#password").val()
+            user_domain_name = $("input#user_domain_name").val()
+            token_request.auth.identity.password.user.domain.name = user_domain\
+_name
             token_request.auth.identity.password.user.name = username
             token_request.auth.identity.password.user.password = password
         }
@@ -280,3 +287,64 @@ function add_role(){
     });
 
 }
+
+
+function list_domains(){
+    request_url = auth_url + "/domains/"
+    $.ajax( {
+	url: request_url,
+        dataType: "json",
+        method:"get",
+	headers:{ "Content-Type": "application/json",
+                  "X-Auth-Token": token_id
+                },
+        success: function(data, textStatus, request){
+            $("ol#domain_list > li").remove()
+            data.domains.forEach(function (domain, index, array){
+               $("ol#domain_list").
+                  append($("<li>").
+                         append(domain.id + ":" +
+                                domain.name + ":" +
+                                domain.description ))
+          })
+
+        }
+
+    });
+}
+
+
+function create_domain(){
+
+    create_domain_request = {
+	"domain": {
+            "name": "",
+            "description":""
+        }
+    }
+    request_url = keystone_endpoint + "/domains"
+
+    domain_name = $("input#new_domain_name").val()
+    domain_description = $("input#new_domain_description").val()
+
+    create_domain_request.domain.name =  domain_name
+    create_domain_request.domain.description =  domain_description
+
+    $.ajax( {
+        url: request_url,
+        dataType: "json",
+	data: JSON.stringify(create_domain_request),
+	method:"post",
+        headers:{ "Content-Type": "application/json",
+                  "X-Auth-Token": token_id
+                },
+	success: function(data, textStatus, request){
+            list_domains()
+	},
+
+	error: function(data, textStatus, request){
+            alert("create domain failed")
+        }
+    });
+}
+
