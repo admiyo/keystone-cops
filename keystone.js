@@ -138,8 +138,7 @@ function submit_token_request(){
             username = $("input#username").val()
             password = $("input#password").val()
             user_domain_name = $("input#user_domain_name").val()
-            token_request.auth.identity.password.user.domain.name = user_domain\
-_name
+            token_request.auth.identity.password.user.domain.name = user_domain_name
             token_request.auth.identity.password.user.name = username
             token_request.auth.identity.password.user.password = password
         }
