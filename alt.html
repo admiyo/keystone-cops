@@ -5,17 +5,49 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
     <script src="alt.js"></script>
-
-
-
 </head>
 
-<body ng-app="myapp">
+<body ng-app="angular_keystone">
 
-  <div ng-controller="MyController" >
-    <button ng-click="myData.doClick(item, $event)">Send AJAX Request</button>
+  <div ng-controller="TokenController" >
+    <dl>
+      <dt>Online (uncheck to work with static data)</dt>
+      <dd>
+        <input type="checkbox" ng-model="online" value="true"></input>
+      </dd>
+      <dt>Authentication method</dt>
+      <dd>
+        <input type="radio" ng-model="auth_method" value="kerberos">kerberos</input>
+        <input type="radio" ng-model="auth_method" value="password">password</input>
+        <input type="radio" ng-model="auth_method" value="token">token</input>
+      </dd>
+      <dt>User Domain Name</dt>
+      <dd>
+        <input type="text" ng-model="user_domain_name"></input>
+      </dd>
+      <dt>Username</dt>
+      <dd>
+        <input type="text" ng-model="user_name"></input>
+      </dd>
+      <dt>Password</dt>
+      <dd>
+        <input type="password" ng-model="password"></input>
+      </dd>
+      <dt></dt>
+      <dd>
+        <button ng-click="myData.get_token(item, $event)">Get Token</button>
+        <button ng-click="myData.clear_token(item, $event)">Clear Token</button>
+      </dd>
+    </dl>
     <br/>
-    Data from server: {{myData.fromServer}}
+    <dl>
+      <dt>User Name</dt>
+      <dd>{{user.name}}</dd>
+      <dt>User ID</dt>
+      <dd>{{user.id}}</dd>
+      <dt>Token ID</dt>
+      <dd>{{token_id}}</dd>
+
   </div>
 
 

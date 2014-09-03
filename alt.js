@@ -4,7 +4,6 @@
 OFFLINE=false;
 BASE_URL="https://ayoungf20packstack.cloudlab.freeipa.org/keystone/krb/v3"
 
-
 var unscoped_token_request_body =
     {
         "auth": {
@@ -37,34 +36,61 @@ var project_scoped_section =
         }
     };
 
+    angular.module("angular_keystone", [])
+        .controller("TokenController", function($scope, $http) {
+            $scope.online = true;
+            $scope.auth_method = "kerberos";
+            $scope.user_domain_name = "Default";
 
-
-
-    angular.module("myapp", [])
-        .controller("MyController", function($scope, $http) {
             $scope.myData = {};
-            $scope.myData.doClick = function(item, event) {
-                var responsePromise;
-
+            $scope.myData.get_token = function(item, event) {
+                var response_promise;
                 var token_request  = angular.copy(unscoped_token_request_body)
-                //jQuery.extend(true, {}, unscoped_token_request_body);
 
-                token_request.auth.identity.methods.push("kerberos")
-                token_request.auth.identity['kerberos'] = {}
 
-                if (OFFLINE){
-                    responsePromise = $http.get("sampledata/token.json");
-                }else{
-                    responsePromise = $http.post(BASE_URL + "/auth/tokens", token_request);
+                switch($scope.auth_method){
+                    case "kerberos":
+                    token_request.auth.identity.methods.push("kerberos")
+                    token_request.auth.identity['kerberos'] = {}
+                    break;
+                    case "token":
+                    token_request.auth.identity.methods.push("token")
+                    token_request.auth.identity['token'] =
+                        angular.copy(token_method_data)
+                    token_request.auth.identity.token.id = $scope.token_id
+                    break;
+                    case  "password":
+                    token_request.auth.identity.methods.push("password")
+                    token_request.auth.identity['password'] =
+                        angular.copy(password_method_data)
+
+                    token_request.auth.identity.password.user.domain.name = 
+                        $scope.user_domain_name
+                    token_request.auth.identity.password.user.name = $scope.user_name
+                    token_request.auth.identity.password.user.password = $scope.password
+                    break;
                 }
 
-                responsePromise.success(function(data, status, headers, config) {
-                    $scope.myData.fromServer = data.token.user.name;
+                if ($scope.online){
+                    response_promise = $http.post(BASE_URL + "/auth/tokens", token_request);
+                }else{
+                    response_promise = $http.get("sampledata/token.json");
+                }
+
+                response_promise.success(function(data, status, headers, config) {
+                    $scope.token_id = headers('X-Subject-Token');
+                    $scope.user = data.token.user;
                 });
-                responsePromise.error(function(data, status, headers, config) {
+                response_promise.error(function(data, status, headers, config) {
                     alert("AJAX failed!");
                 });
             }
+
+            $scope.myData.clear_token = function(item, event) {
+                    $scope.user = {};
+                    $scope.token_id = null;
+            }
+
 
 
         } );
