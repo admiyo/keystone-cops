@@ -1,12 +1,7 @@
-//Alternative to JQuery
 
-
-OFFLINE=false;
 BASE_URL="/keystone/main/v3"
 KERBEROS_URL="/keystone/krb/v3"
 
-
-angular.module('myModule', ['ui.bootstrap']);
 
 
 var unscoped_token_request_body =
@@ -41,9 +36,27 @@ var project_scoped_section =
         }
     };
 
-    angular.module("angular_keystone", [])
+    angular.module("angular_keystone", ['ui.bootstrap'])
         .controller("TokenController", function($scope, $http) {
-            $scope.online = true;
+
+
+            $scope.alerts = [];
+
+            $scope.addAlert = function() {
+                $scope.alerts.push({msg: 'Another alert!'});
+            };
+
+            $scope.closeAlert = function(index) {
+                $scope.alerts.splice(index, 1);
+            };
+
+
+
+            $scope.online = (! (/^file/).test(document.URL))
+            
+            //If the url starts with file, we do not have a live server 
+            //to test against, so we use sample data instead.
+
             $scope.auth_method = "kerberos";
             $scope.user_domain_name = "Default";
 
@@ -89,7 +102,10 @@ var project_scoped_section =
                     $scope.user = data.token.user;
                 });
                 response_promise.error(function(data, status, headers, config) {
-                    alert("AJAX failed!");
+                    $scope.alerts.push(
+                        {type: 'danger',
+                         msg: 'Token Fetch Failed with status ' + status + '.'});
+
                 });
             }
 
@@ -99,6 +115,4 @@ var project_scoped_section =
             }
 
         } );
-
-
 

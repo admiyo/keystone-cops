@@ -3,9 +3,17 @@
 
 
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.js"></script>
+  <script src="bootstrap/ui-bootstrap-0.11.0.js"> </script>
+  <script src="bootstrap/ui-bootstrap-tpls-0.11.0.js"> </script>
   <script src="alt.js"></script>
-  
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="bootstrap/bootstrap-theme.min.css">
+
+
 </head>
 
 <body ng-app="angular_keystone">
@@ -42,6 +50,9 @@
       </dd>
     </dl>
     <br/>
+
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
 
     <dl>
       <dt>User Name</dt>
