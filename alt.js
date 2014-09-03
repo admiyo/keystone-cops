@@ -2,7 +2,12 @@
 
 
 OFFLINE=false;
-BASE_URL="https://ayoungf20packstack.cloudlab.freeipa.org/keystone/krb/v3"
+BASE_URL="https://ayoungf20packstack.cloudlab.freeipa.org/keystone/main/v3"
+KERBEROS_URL="https://ayoungf20packstack.cloudlab.freeipa.org/keystone/krb/v3"
+
+
+angular.module('myModule', ['ui.bootstrap']);
+
 
 var unscoped_token_request_body =
     {
@@ -46,12 +51,14 @@ var project_scoped_section =
             $scope.myData.get_token = function(item, event) {
                 var response_promise;
                 var token_request  = angular.copy(unscoped_token_request_body)
-
+                var base_url = BASE_URL
 
                 switch($scope.auth_method){
                     case "kerberos":
                     token_request.auth.identity.methods.push("kerberos")
                     token_request.auth.identity['kerberos'] = {}
+                    base_url = KERBEROS_URL
+
                     break;
                     case "token":
                     token_request.auth.identity.methods.push("token")
@@ -72,7 +79,7 @@ var project_scoped_section =
                 }
 
                 if ($scope.online){
-                    response_promise = $http.post(BASE_URL + "/auth/tokens", token_request);
+                    response_promise = $http.post(base_url + "/auth/tokens", token_request);
                 }else{
                     response_promise = $http.get("sampledata/token.json");
                 }
@@ -91,6 +98,7 @@ var project_scoped_section =
                     $scope.token_id = null;
             }
 
-
-
         } );
+
+
+

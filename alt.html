@@ -3,14 +3,16 @@
 
 
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
-    <script src="alt.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
+  <script src="alt.js"></script>
+  
 </head>
 
 <body ng-app="angular_keystone">
 
+
   <div ng-controller="TokenController" >
-    <dl>
+    <dl >
       <dt>Online (uncheck to work with static data)</dt>
       <dd>
         <input type="checkbox" ng-model="online" value="true"></input>
@@ -40,6 +42,7 @@
       </dd>
     </dl>
     <br/>
+
     <dl>
       <dt>User Name</dt>
       <dd>{{user.name}}</dd>
@@ -47,10 +50,7 @@
       <dd>{{user.id}}</dd>
       <dt>Token ID</dt>
       <dd>{{token_id}}</dd>
-
   </div>
-
-
 </body>
 
 </html>
