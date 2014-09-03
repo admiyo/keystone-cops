@@ -2,8 +2,8 @@
 
 
 OFFLINE=false;
-BASE_URL="https://ayoungf20packstack.cloudlab.freeipa.org/keystone/main/v3"
-KERBEROS_URL="https://ayoungf20packstack.cloudlab.freeipa.org/keystone/krb/v3"
+BASE_URL="/keystone/main/v3"
+KERBEROS_URL="/keystone/krb/v3"
 
 
 angular.module('myModule', ['ui.bootstrap']);
