@@ -65,8 +65,7 @@ var project_scoped_section =
             $scope.trust = null;
 
 
-            $scope.myData = {};
-            $scope.myData.get_token = function(item, event) {
+            $scope.get_token = function(item, event) {
                 var response_promise;
                 var token_request  = angular.copy(unscoped_token_request_body)
                 var base_url = BASE_URL
@@ -117,6 +116,7 @@ var project_scoped_section =
                 }
 
                 response_promise.success(function(data, status, headers, config) {
+                    $scope.token_trust = data.token["OS-TRUST:trust"]
                     $scope.token_id = headers('X-Subject-Token');
                     $scope.user = data.token.user;
                     $scope.token = data.token;
@@ -129,14 +129,20 @@ var project_scoped_section =
                 });
             }
 
-            $scope.myData.clear_token = function(item, event) {
-                    $scope.user = {};
-                    $scope.token_id = null;
+            $scope.clear_token = function(item, event) {
+                $scope.user = {};
+                $scope.token_id = null;
+                $scope.user_domain_name = "Default";
+                $scope.projects = [];
+                $scope.project = null;
+                $scope.trusts = [];
+                $scope.trust = null;
+                $scope.token_trust = null
             }
 
 
 
-            $scope.myData.create_self_trust = function (item, event){
+            $scope.create_self_trust = function (item, event){
                 var create_trust_request_body = {
                     "trust": {
                         //        "expires_at": ,
@@ -183,7 +189,7 @@ var project_scoped_section =
                 });
             }
 
-            $scope.myData.list_trusts = function(item, event) {
+            $scope.list_trusts = function(item, event) {
 
                 var response_promise;
                 var base_url = BASE_URL
@@ -221,7 +227,7 @@ var project_scoped_section =
 
 
 
-            $scope.myData.list_projects = function(item, event) {
+            $scope.list_projects = function(item, event) {
 
                 var response_promise;
                 var base_url = BASE_URL

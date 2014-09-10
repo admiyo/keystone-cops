@@ -47,11 +47,11 @@
       </dd>
       <dt></dt>
       <dd>
-        <button ng-click="myData.get_token(item, $event)">Get Token</button>
-        <button ng-click="myData.clear_token(item, $event)">Clear Token</button>
-        <button ng-click="myData.list_projects(item, $event)">List Projects</button>
-        <button ng-click="myData.create_self_trust(item, $event)">Create Trust for Token</button>
-        <button ng-click="myData.list_trusts(item, $event)">List Trusts</button>
+        <button ng-click="get_token(item, $event)">Get Token</button>
+        <button ng-click="clear_token(item, $event)">Clear Token</button>
+        <button ng-click="list_projects(item, $event)">List Projects</button>
+        <button ng-click="create_self_trust(item, $event)">Create Trust for Token</button>
+        <button ng-click="list_trusts(item, $event)">List Trusts</button>
 
        </dd>
       <dt>Projects</dt>
@@ -90,9 +90,12 @@
       <dd>{{token.project.name}}</dd>
       <dt>Roles</dt>
       <dd>{{token.roles}}</dd>
+      <dt>Trust Data</dt>
+      <dd>{{token_trust}}</dd>
+
     </dl>
-    <h2>Trust Data</h2>
-    <span></span>
+    <h2>Trusts List</h2>
+    <span>{{trusts}}</span>
   </div>
 </body>
 
