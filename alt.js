@@ -62,6 +62,8 @@ var project_scoped_section =
             $scope.user_domain_name = "Default";
             $scope.projects = [];
             $scope.project = null;
+            $scope.trusts = [];
+            $scope.trust = null;
 
 
             $scope.myData = {};
@@ -95,7 +97,13 @@ var project_scoped_section =
                     break;
                 }
 
-                if ($scope.project){
+                if ($scope.trust){
+                    token_request.auth['scope'] = {
+                        "OS-TRUST:trust": {
+                            "id": $scope.trust.id
+                        }
+                    }
+                } else if ($scope.project){
                     token_request.auth['scope'] =
                         angular.copy(project_scoped_section);
                     token_request.auth.scope.project.name =
@@ -142,9 +150,6 @@ var project_scoped_section =
                 }
             
 
-                function add_role_to_trust_request(role, index, array) {
-                    create_trust_request_body.trust.roles.append(role);
-                }
                 //this is a hack.  But anything not required is ignored.
                 create_trust_request_body.trust.roles =  $scope.token.roles;
 
@@ -179,10 +184,45 @@ var project_scoped_section =
                 });
             }
 
+            $scope.myData.list_trusts = function(item, event) {
+
+                var response_promise;
+                var base_url = BASE_URL
+
+                request_url = base_url + "/OS-TRUST/trusts"
+
+                var config = {
+                    headers:  {
+                        'X-Auth-Token': $scope.token_id,
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                if ($scope.online){
+                    response_promise = $http.get(request_url, config);
+                }else{
+                    response_promise = $http.get("sampledata/list_trusts.json");
+                }
+
+                response_promise.success(function(data, status, headers, config) {
+                    $scope.trusts = data.trusts;
+                    
+                });
+                response_promise.error(function(data, status, headers, config) {
+                    $scope.alerts.push(
+                        {type: 'danger',
+                         msg: 'List Trusts Failed with status ' + status + '.'});
+
+                });
+
+
+            }
+
+
+
             $scope.myData.list_projects = function(item, event) {
 
                 var response_promise;
-                var token_request  = angular.copy(unscoped_token_request_body)
                 var base_url = BASE_URL
                 switch($scope.auth_method){
                 case "kerberos":
@@ -218,7 +258,6 @@ var project_scoped_section =
 
 
             }
-
 
         } );
 

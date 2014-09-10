@@ -51,6 +51,8 @@
         <button ng-click="myData.clear_token(item, $event)">Clear Token</button>
         <button ng-click="myData.list_projects(item, $event)">List Projects</button>
         <button ng-click="myData.create_self_trust(item, $event)">Create Trust for Token</button>
+        <button ng-click="myData.list_trusts(item, $event)">List Trusts</button>
+
        </dd>
       <dt>Projects</dt>
       <dd>
@@ -58,6 +60,13 @@
            ng-model="project"
            ng-options="project.name for project in projects"]></select>
       </dd>
+      <dt>Trusts</dt>
+      <dd>
+        <select
+           ng-model="trust"
+           ng-options="trust.id for trust in trusts"]></select>
+      </dd>
+
     </dl>
     <br/>
 
@@ -68,7 +77,7 @@
 
     <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
-
+    <h2>Token Data</h2>
     <dl>
       <dt>User Name</dt>
       <dd>{{user.name}}</dd>
@@ -78,6 +87,9 @@
       <dd>{{token.project.name}}</dd>
       <dt>Roles</dt>
       <dd>{{token.roles}}</dd>
+    </dl>
+    <h2>Trust Data</h2>
+    <span></span>
   </div>
 </body>
 
