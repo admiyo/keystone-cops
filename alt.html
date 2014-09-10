@@ -16,6 +16,8 @@
 
 </head>
 
+<a href="trust.html">Trusts</a>
+
 <body ng-app="angular_keystone">
 
 
@@ -47,7 +49,19 @@
       <dd>
         <button ng-click="myData.get_token(item, $event)">Get Token</button>
         <button ng-click="myData.clear_token(item, $event)">Clear Token</button>
+        <button ng-click="myData.list_projects(item, $event)">List Projects</button>
       </dd>
+      <dt>Projects</dt>
+      <dd>
+        <select
+           ng-model="project"
+           ng-options="project.name for project in projects"]></select>
+      </dd>
+    </dl>
+    <br/>
+
+
+
     </dl>
     <br/>
 
@@ -59,8 +73,7 @@
       <dd>{{user.name}}</dd>
       <dt>User ID</dt>
       <dd>{{user.id}}</dd>
-      <dt>Token ID</dt>
-      <dd>{{token_id}}</dd>
+
   </div>
 </body>
 

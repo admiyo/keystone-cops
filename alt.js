@@ -59,6 +59,8 @@ var project_scoped_section =
 
             $scope.auth_method = "kerberos";
             $scope.user_domain_name = "Default";
+            $scope.projects = [];
+            $scope.project = null;
 
             $scope.myData = {};
             $scope.myData.get_token = function(item, event) {
@@ -100,6 +102,7 @@ var project_scoped_section =
                 response_promise.success(function(data, status, headers, config) {
                     $scope.token_id = headers('X-Subject-Token');
                     $scope.user = data.token.user;
+                    $scope.token = data.token;
                 });
                 response_promise.error(function(data, status, headers, config) {
                     $scope.alerts.push(
@@ -113,6 +116,50 @@ var project_scoped_section =
                     $scope.user = {};
                     $scope.token_id = null;
             }
+
+
+            $scope.myData.list_projects = function(item, event) {
+
+                var response_promise;
+                var token_request  = angular.copy(unscoped_token_request_body)
+                var base_url = BASE_URL
+                switch($scope.auth_method){
+                case "kerberos":
+                    base_url = KERBEROS_URL
+                }
+
+                request_url = base_url + "/users/" +  $scope.token.user.id +"/projects"
+
+                var config = {
+                    headers:  {
+                        'X-Auth-Token': $scope.token_id,
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                if ($scope.online){
+                    response_promise = $http.get(request_url, config);
+                }else{
+                    response_promise = $http.get("sampledata/token.json");
+                }
+
+
+
+                response_promise.success(function(data, status, headers, config) {
+                    project_data = data.projects;
+                    $scope.projects = project_data;
+                    
+                });
+                response_promise.error(function(data, status, headers, config) {
+                    $scope.alerts.push(
+                        {type: 'danger',
+                         msg: 'Token Fetch Failed with status ' + status + '.'});
+
+                });
+
+
+            }
+
 
         } );
 
