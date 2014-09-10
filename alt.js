@@ -3,7 +3,6 @@ BASE_URL="/keystone/main/v3"
 KERBEROS_URL="/keystone/krb/v3"
 
 
-
 var unscoped_token_request_body =
     {
         "auth": {
@@ -35,6 +34,8 @@ var project_scoped_section =
             "name": ""
         }
     };
+
+
 
     angular.module("angular_keystone", ['ui.bootstrap'])
         .controller("TokenController", function($scope, $http) {
@@ -127,6 +128,57 @@ var project_scoped_section =
             }
 
 
+
+            $scope.myData.create_self_trust = function (item, event){
+                var create_trust_request_body = {
+                    "trust": {
+                        //        "expires_at": ,
+                        "impersonation": false,
+                        "project_id": $scope.token.project.id,
+                        "roles": [],
+                        "trustee_user_id": $scope.token.user.id,
+                        "trustor_user_id": $scope.token.user.id
+                    }
+                }
+            
+
+                function add_role_to_trust_request(role, index, array) {
+                    create_trust_request_body.trust.roles.append(role);
+                }
+                //this is a hack.  But anything not required is ignored.
+                create_trust_request_body.trust.roles =  $scope.token.roles;
+
+                var base_url = BASE_URL
+
+                request_url = base_url + "/OS-TRUST/trusts"
+
+                var config = {
+                    headers:  {
+                        'X-Auth-Token': $scope.token_id,
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                if ($scope.online){
+                    response_promise = $http.post(request_url, create_trust_request_body, config);
+                }else{
+                    response_promise = $http.get("sampledata/create_trust.json");
+                }
+
+                response_promise.success(function(data, status, headers, config) {
+                    $scope.alerts.push(
+                        {type: 'info',
+                         msg: 'Create Trust Succeeded.'});
+                    
+                });
+                response_promise.error(function(data, status, headers, config) {
+                    $scope.alerts.push(
+                        {type: 'danger',
+                         msg: 'Create Trust Failed with status ' + status + '.'});
+
+                });
+            }
+
             $scope.myData.list_projects = function(item, event) {
 
                 var response_promise;
@@ -149,7 +201,7 @@ var project_scoped_section =
                 if ($scope.online){
                     response_promise = $http.get(request_url, config);
                 }else{
-                    response_promise = $http.get("sampledata/token.json");
+                    response_promise = $http.get("sampledata/list_projects.json");
                 }
 
                 response_promise.success(function(data, status, headers, config) {
@@ -160,7 +212,7 @@ var project_scoped_section =
                 response_promise.error(function(data, status, headers, config) {
                     $scope.alerts.push(
                         {type: 'danger',
-                         msg: 'Token Fetch Failed with status ' + status + '.'});
+                         msg: 'List Projects Failed with status ' + status + '.'});
 
                 });
 
