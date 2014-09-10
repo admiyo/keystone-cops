@@ -1,4 +1,3 @@
-
 BASE_URL="/keystone/main/v3"
 KERBEROS_URL="/keystone/krb/v3"
 
@@ -54,8 +53,8 @@ var project_scoped_section =
 
 
             $scope.online = (! (/^file/).test(document.URL))
-            
-            //If the url starts with file, we do not have a live server 
+
+            //If the url starts with file, we do not have a live server
             //to test against, so we use sample data instead.
 
             $scope.auth_method = "kerberos";
@@ -90,7 +89,7 @@ var project_scoped_section =
                     token_request.auth.identity['password'] =
                         angular.copy(password_method_data)
 
-                    token_request.auth.identity.password.user.domain.name = 
+                    token_request.auth.identity.password.user.domain.name =
                         $scope.user_domain_name
                     token_request.auth.identity.password.user.name = $scope.user_name
                     token_request.auth.identity.password.user.password = $scope.password
@@ -148,7 +147,7 @@ var project_scoped_section =
                         "trustor_user_id": $scope.token.user.id
                     }
                 }
-            
+
 
                 //this is a hack.  But anything not required is ignored.
                 create_trust_request_body.trust.roles =  $scope.token.roles;
@@ -174,7 +173,7 @@ var project_scoped_section =
                     $scope.alerts.push(
                         {type: 'info',
                          msg: 'Create Trust Succeeded.'});
-                    
+
                 });
                 response_promise.error(function(data, status, headers, config) {
                     $scope.alerts.push(
@@ -191,22 +190,24 @@ var project_scoped_section =
 
                 request_url = base_url + "/OS-TRUST/trusts"
 
-                var config = {
-                    headers:  {
-                        'X-Auth-Token': $scope.token_id,
-                        "Content-Type": "application/json"
-                    }
-                };
-
                 if ($scope.online){
-                    response_promise = $http.get(request_url, config);
+                    response_promise = $http({
+                        method: "GET",
+                        url:request_url,
+                        headers:  {
+                            'X-Auth-Token': $scope.token_id,
+                            "Content-Type": "application/json"
+                        },
+                        params: {
+                            trustor_user_id: $scope.user.id
+                        }
+                    });
                 }else{
                     response_promise = $http.get("sampledata/list_trusts.json");
                 }
 
                 response_promise.success(function(data, status, headers, config) {
                     $scope.trusts = data.trusts;
-                    
                 });
                 response_promise.error(function(data, status, headers, config) {
                     $scope.alerts.push(
@@ -247,7 +248,6 @@ var project_scoped_section =
                 response_promise.success(function(data, status, headers, config) {
                     project_data = data.projects;
                     $scope.projects = project_data;
-                    
                 });
                 response_promise.error(function(data, status, headers, config) {
                     $scope.alerts.push(
@@ -260,4 +260,3 @@ var project_scoped_section =
             }
 
         } );
-
