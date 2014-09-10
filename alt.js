@@ -62,6 +62,7 @@ var project_scoped_section =
             $scope.projects = [];
             $scope.project = null;
 
+
             $scope.myData = {};
             $scope.myData.get_token = function(item, event) {
                 var response_promise;
@@ -92,6 +93,14 @@ var project_scoped_section =
                     token_request.auth.identity.password.user.password = $scope.password
                     break;
                 }
+
+                if ($scope.project){
+                    token_request.auth['scope'] =
+                        angular.copy(project_scoped_section);
+                    token_request.auth.scope.project.name =
+                        $scope.project.name;
+                }
+
 
                 if ($scope.online){
                     response_promise = $http.post(base_url + "/auth/tokens", token_request);
@@ -142,8 +151,6 @@ var project_scoped_section =
                 }else{
                     response_promise = $http.get("sampledata/token.json");
                 }
-
-
 
                 response_promise.success(function(data, status, headers, config) {
                     project_data = data.projects;
